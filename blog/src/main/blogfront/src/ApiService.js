@@ -3,15 +3,15 @@ import axios from 'axios';
 const BLOG_API_URL = "http://localhost:8080/api/articles"
 
 class ApiService {
-    fetchArticles() {
+    LoadArticles() {
         return axios.get(BLOG_API_URL);
     }
     fetchArticleById(id){
-        return axios.get(BLOG_API_URL+"/"+id)
+        return axios.get(`http://localhost:8080/api/articles/${id}`)
     }
 
     deleteArticle(id){
-        return axios.delete(BLOG_API_URL+"/"+id)
+        return axios.delete(`http://localhost:8080/api/articles/${id}`)
     }
 
     addArticle(Article){
@@ -19,7 +19,7 @@ class ApiService {
     }
 
     editArticle(Article){
-        return axios.put(BLOG_API_URL, Article);
+        return axios.patch(BLOG_API_URL, Article);
     }
 }
 

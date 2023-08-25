@@ -1,81 +1,73 @@
-import React, { Component } from "react";
+import React, {useEffect, useState} from "react";
 import ApiService from "./ApiService";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, FormControl, TextField, Typography} from "@material-ui/core";
 
-class EditArticle extends Component {
-    constructor(props) {
-        super(props);
+const EditArticle = () => {
+    const navigate = new useNavigate();
+    const {id} = useParams();
+    const [article, setArticle] = useState({
+        id:0,
+        title : '',
+        content:'',
+    });
 
-        this.state = {
-            id:'',
-            title:'',
-            content:'',
-            message:null
-        }
-    }
-    componentDidMount() {
-        this.loadArticle();
-    }
-    loadArticle = () => {
-        ApiService.fetchArticleById(window.localStorage.getItem("id"))
-            .then( res => {
-                let Article = res.data;
-                this.setState({
-                    id : Article.id,
-                    title: Article.title,
-                    content: Article.content
-                })
-            })
-            .catch(err => {
-                console.log('loadArticle() Error', err);
-            });
-    }
-    onChange = (e) => {
-        this.setState({
-            [e.target.name] : e.target.value
+    const {title, content } = article;
+
+    const onChange = (e) => {
+        const {value, name} = e.target;
+        setArticle({
+            ...article,
+            [name]: value,
         });
-    }
-    saveArticle = (e) => {
-        e.preventDefault();
+    };
 
-        let Article = {
-            id: this.state.id,
-            title: this.state.title,
-            content: this.state.content
+    const saveArticle = async () => {
+        await ApiService.editArticle(article)
+            .then( (res) => {
+                alert('글 수정 완료')
+                navigate('/articles/'+id)
+            });
+    };
 
-        }
-
-        ApiService.editArticle(Article)
-            .then( res => {
-                this.setState({
-                    message : "글 수정 완료"
-                })
-                this.props.history.push('/Articles');
-            })
-            .catch(err => {
-                console.log('saveArticle() Error', err)
-            })
-
+    const backToArticle = () => {
+        navigate('/articles/'+id)
     }
 
-    render() {
-        return(
-            <div>
-                <h2>글 수정 </h2>
-                <form>
-                    <div>
-                        <lable>글 제목 : </lable>
-                        <input type="text" name="title" value={this.state.title} onChange={this.onChange} />
-                    </div>
-                    <div>
-                        <textarea cols="50" rows="50"></textarea>
-                        <input type="submit" value={this.state.content} onChange={this.onChange} />
-                    </div>
+    useEffect(() => {
+        ApiService.fetchArticleById(id).then(response => {
+            setArticle(response.data);
+            console.log(article)
+        })
+    }, []);
 
-                </form>
-            </div>
+
+    return(
+        <>
+            <Typography variant={"h3"} style={style}>글 수정하기</Typography>
+            <FormControl id="article" fullWidth="True">
+
+                <TextField label="글 제목" name="title" onChange={onChange} value={title}></TextField>
+
+                <TextField
+                    id="outlined-multiline-static"
+                    label="글 내용"
+                    name="content"
+                    multiline
+                    minRows={20}
+                    value={content}
+                    onChange={onChange}></TextField>
+                <Button onClick={saveArticle}>수정</Button>
+                <Button onClick={backToArticle}>취소</Button>
+            </FormControl>
+        </>
         )
-    }
 
+
+}
+const style = {
+    display : 'flex',
+    justifyContent: 'center'
 }
 
 export default EditArticle;
