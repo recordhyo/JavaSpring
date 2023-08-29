@@ -18,9 +18,19 @@ class ApiService {
         return axios.post(BLOG_API_URL, Article);
     }
 
-    editArticle(Article){
-        return axios.patch(BLOG_API_URL, Article);
+    editArticle(id, Article){
+        return axios.put(`http://localhost:8080/api/articles/${id}`, Article);
     }
+
+    loginpage(){
+        return axios.get("http://localhost:8080/login")
+    }
+
+    signup(){
+        return axios.get("http://localhost:8080/signup")
+    }
+
+
 }
 
 export default new ApiService();

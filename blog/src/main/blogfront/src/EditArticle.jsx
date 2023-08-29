@@ -19,11 +19,12 @@ const EditArticle = () => {
         setArticle({
             ...article,
             [name]: value,
+
         });
     };
 
     const saveArticle = async () => {
-        await ApiService.editArticle(article)
+        await ApiService.editArticle(id,article)
             .then( (res) => {
                 alert('글 수정 완료')
                 navigate('/articles/'+id)
@@ -37,7 +38,7 @@ const EditArticle = () => {
     useEffect(() => {
         ApiService.fetchArticleById(id).then(response => {
             setArticle(response.data);
-            console.log(article)
+            console.log(article.id)
         })
     }, []);
 
@@ -45,7 +46,7 @@ const EditArticle = () => {
     return(
         <>
             <Typography variant={"h3"} style={style}>글 수정하기</Typography>
-            <FormControl id="article" fullWidth="True">
+            <FormControl id="article" fullWidth={true}>
 
                 <TextField label="글 제목" name="title" onChange={onChange} value={title}></TextField>
 

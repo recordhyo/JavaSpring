@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import ApiService from "./ApiService";
-import Article from "./component/Article";
+import Article from "./Article";
 
 const ViewArticle = () => {
     const { id} = useParams();
@@ -12,7 +12,6 @@ const ViewArticle = () => {
 
         })
     }, []);
-
 
     return(
          <div>

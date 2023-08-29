@@ -37,7 +37,7 @@ const AddArticle = () => {
     return(
         <>
             <Typography variant={"h3"} style={style}>글 등록하기</Typography>
-            <FormControl id="article" fullWidth="True">
+            <FormControl id="article" fullWidth={true}>
 
                 <TextField label="글 제목" name="title" onChange={onChange} value={title}></TextField>
 

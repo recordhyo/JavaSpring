@@ -1,7 +1,7 @@
 import {Divider, Typography} from "@material-ui/core";
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import ApiService from "../ApiService";
+import ApiService from "./ApiService";
 
 const Article = ({id, title, content}) => {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Article = ({id, title, content}) => {
         <div>
             <div>
                 <h2>{title}</h2>
-                <hr />
+                <br />
                 <p>{content}</p>
             </div>
             <div>

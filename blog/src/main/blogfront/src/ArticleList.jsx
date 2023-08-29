@@ -5,7 +5,6 @@ import {
     ListItem,
     ListItemText,
     Typography,
-    Link,
     Table,
     List,
     TableCell,
@@ -13,13 +12,13 @@ import {
     TableRow,
     ListItemIcon
 } from "@material-ui/core";
-import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
+import {useNavigate, Link} from "react-router-dom";
+import Layout from "./components/Layout/Layout";
 
 
 
 function ArticleList() {
-    const {id} = useParams();
+
     const [articleList, setArticleList] = useState([]);
     const navigate = new useNavigate();
 
@@ -27,16 +26,11 @@ function ArticleList() {
     useEffect(() => {
         ApiService.LoadArticles().then(response => {
             setArticleList(response.data);
-
-
         })
     }, []);
+
     const addArticle = () => {
         navigate("/addArticle");
-    };
-
-    const editArticle = () => {
-        navigate("/articles"+id);
     };
 
     const deleteArticle = (id) => {
@@ -44,7 +38,7 @@ function ArticleList() {
             .then(function (response) {
                 // handle success
                 alert("삭제 완료")
-                navigate("/Articles")
+                window.location.replace("/")
                 console.log(response);
             })
             .catch(function (error) {
@@ -59,8 +53,9 @@ function ArticleList() {
 
     return (
         <>
-            <Typography variant={"h3"} style={style}>블로그 글 목록</Typography>
+            <Typography style={style}>블로그 글 목록</Typography>
             <Button variant={"contained"} color={"primary"} onClick={addArticle}>글쓰기</Button>
+
             <Table>
                 <TableHead>
                     <TableRow>
@@ -70,16 +65,18 @@ function ArticleList() {
                 <List>
                     {articleList.map( (a)=> (
                     <ListItem key={a.id}>
-                        <a href={`/articles/${a.id}`}>{a.title}</a>
-                        <Button onClick={editArticle}>수정</Button>
-                        <Button>삭제</Button>
+                        <ListItemText>
+                            <a href={`/articles/${a.id}`}>{a.title}</a>
+                        </ListItemText>
+                            <Button variant="contained">
+                                <Link to={`/editArticle/${a.id}`} style={{ textDecoration: "none" }}>수정</Link>
+                            </Button>
+                        <Button variant="contained" onClick={() => deleteArticle(a.id)}>삭제</Button>
                     </ListItem>
                         ))}
                 </List>
-
             </Table>
         </>
-
     );
 
 }
