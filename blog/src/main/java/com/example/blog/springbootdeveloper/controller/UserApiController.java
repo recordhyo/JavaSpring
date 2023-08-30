@@ -2,7 +2,9 @@ package com.example.blog.springbootdeveloper.controller;
 
 import com.example.blog.springbootdeveloper.domain.User;
 import com.example.blog.springbootdeveloper.dto.AddUserRequest;
+import com.example.blog.springbootdeveloper.dto.AddUserResponse;
 import com.example.blog.springbootdeveloper.dto.LoginUserRequest;
+import com.example.blog.springbootdeveloper.dto.LoginUserResponse;
 import com.example.blog.springbootdeveloper.repository.UserRepository;
 import com.example.blog.springbootdeveloper.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class UserApiController {
 
+    @Autowired
     private UserService userService;
 
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @GetMapping("/login")
     public String login(){
         return "login";
@@ -37,23 +34,23 @@ public class UserApiController {
     }
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> signup(@RequestBody AddUserRequest request){
-        User signupUser = userRepository.save(request.toEntity());
-        return ResponseEntity.status(HttpStatus.CREATED).body(signupUser);
+    public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
+        //User signupUser = userRepository.save(request.toEntity(passwordEncoder));
+        return ResponseEntity.ok(userService.signup(request));
     }
 //    @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<User> login(@RequestBody LoginUserRequest request){
 //        User signupUser = userRepository.save(request);
 //        return ResponseEntity.status(HttpStatus.CREATED).body(signupUser);
 //    }
-//    @PostMapping(value = "/login", produces = MediaType.A)
-//    public String logIn(@RequestBody LoginUserRequest request) {
-//        try {
-//            return userService.login(request);
-//        } catch (Exception e) {
-//            return e.getMessage();
-//        }
-//    }
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String logIn(@RequestBody LoginUserRequest request) {
+        try {
+            return userService.login(request);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
 }
 
 

@@ -1,11 +1,16 @@
 package com.example.blog.springbootdeveloper.config;
 
 
+//import com.example.blog.springbootdeveloper.service.LoginFailureHandler;
+//import com.example.blog.springbootdeveloper.service.LoginSuccessHandler;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,7 +18,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -24,6 +33,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig{
     private final UserDetailService userService;
 
+    private final ObjectMapper objectMapper;
+//    private final LoginFailureHandler loginFailureHandler;
+//    private final LoginSuccessHandler loginSuccessHandler;
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().requestMatchers("/static/**");
@@ -53,19 +65,36 @@ public class WebSecurityConfig{
                 .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles").usernameParameter("username").passwordParameter("password"))
-                .logout(logout -> logout.logoutSuccessUrl("/articles").invalidateHttpSession(true))
+                .logout(logout -> logout.logoutSuccessUrl("/api/articles").invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable)
-                .requestCache((cashe)-> cashe.requestCache(requestCache)).build();
+                .requestCache((cashe)-> cashe.requestCache(requestCache))
+                //.addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
+//    @Bean
+//    public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter() {
+//        JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper, loginSuccessHandler, loginFailureHandler);
+//        jsonUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManager());
+//        return jsonUsernamePasswordAuthenticationFilter;
+//    }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception{
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userService)
-                .passwordEncoder(bCryptPasswordEncoder).and().build();
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder encoder, UserDetailService userDetailService) throws Exception{
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userService)
+                .passwordEncoder(encoder).and().build();
     }
+
+
+
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//
+//        provider.setPasswordEncoder(passwordEncoder());
+//        provider.setUserDetailsService(userService);
+//
+//        return new ProviderManager(provider);
+
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
