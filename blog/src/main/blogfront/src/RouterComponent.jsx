@@ -11,9 +11,10 @@ import Signup from "./Signup";
 const AppRouter = () => {
     return(
         <div>
-            <Header />
+
             <BrowserRouter>
                 <div style={style}>
+                    <Header />
                     <Routes>
                         <Route exact path="/" element={<ArticleList/>}/>
                         <Route path="/articles" element={<ArticleList/>}/>
@@ -23,10 +24,10 @@ const AppRouter = () => {
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<Signup/>}/>
                     </Routes>
-
+                    <Footer/>
                 </div>
             </BrowserRouter>
-           <Footer/>
+
         </div>
     );
 }

@@ -10,16 +10,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig {
+public class WebSecurityConfig{
     private final UserDetailService userService;
 
     @Bean
@@ -44,26 +46,24 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+        requestCache.setMatchingRequestParameterName(null);
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup").permitAll()
+                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/articles"))
+                .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles").usernameParameter("username").passwordParameter("password"))
                 .logout(logout -> logout.logoutSuccessUrl("/articles").invalidateHttpSession(true))
-                .csrf(AbstractHttpConfigurer::disable).build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .requestCache((cashe)-> cashe.requestCache(requestCache)).build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       BCryptPasswordEncoder bCryptPasswordEncoder,
-                                                       UserDetailService userDetailService) throws Exception{
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception{
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userService)
-                .passwordEncoder(bCryptPasswordEncoder)
-                .and().build();
-
+                .passwordEncoder(bCryptPasswordEncoder).and().build();
     }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

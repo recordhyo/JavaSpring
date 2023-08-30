@@ -26,7 +26,7 @@ class ApiService {
         return axios.get("http://localhost:8080/login")
     }
 
-    signup(){
+    signuppage(){
         return axios.get("http://localhost:8080/signup")
     }
 

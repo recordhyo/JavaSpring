@@ -13,7 +13,6 @@ import {
     ListItemIcon
 } from "@material-ui/core";
 import {useNavigate, Link} from "react-router-dom";
-import Layout from "./components/Layout/Layout";
 
 
 
@@ -56,12 +55,6 @@ function ArticleList() {
             <Typography style={style}>블로그 글 목록</Typography>
             <Button variant={"contained"} color={"primary"} onClick={addArticle}>글쓰기</Button>
 
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>제목</TableCell>
-                    </TableRow>
-                </TableHead>
                 <List>
                     {articleList.map( (a)=> (
                     <ListItem key={a.id}>
@@ -75,7 +68,7 @@ function ArticleList() {
                     </ListItem>
                         ))}
                 </List>
-            </Table>
+
         </>
     );
 
