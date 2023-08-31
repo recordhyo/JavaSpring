@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useParams} from "react-router-dom";
-import ApiService from "./ApiService";
+import ApiService from "./api/ApiService";
 import Article from "./Article";
 
 const ViewArticle = () => {

@@ -10,13 +10,13 @@ const Header = () => {
     const goToSignupForm = () => {
         navigate('/signup')
     }
-    const backToArticleList = () => {
-        navigate('/articles')
+    const backToHome = () => {
+        navigate('/')
     }
 
     return (
         <div className={styles.header}>
-            <h2 onClick={backToArticleList}>Header</h2>
+            <h2 onClick={backToHome}>Header</h2>
             <nav>
                 <ul>
                     <li>메뉴 1</li>

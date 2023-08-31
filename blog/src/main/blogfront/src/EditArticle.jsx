@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ApiService from "./ApiService";
+import ApiService from "./api/ApiService";
 import {useNavigate, useParams} from "react-router-dom";
 import {Button, FormControl, TextField, Typography} from "@material-ui/core";
 

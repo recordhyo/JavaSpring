@@ -1,23 +1,15 @@
 import React, {useEffect, useState} from "react";
-import ApiService from "./ApiService";
+import ApiService from "./api/ApiService";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import qs from "qs";
+
 
 function Login() {
     const navigate = new useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const axiosConfig = {
-        header:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        }
-    }
-    const axiosBody = {
-        username : email,
-        password : password
-    }
     useEffect(() => {
         ApiService.loginpage()
             .then()
@@ -32,41 +24,40 @@ function Login() {
         setPassword(e.currentTarget.value);
     }
 
-    const onClickLogin = (e) => {
+    const submitHandler = (e) => {
         e.preventDefault();
-        const formdata = new FormData();
-        formdata.append("username", email);
-        formdata.append("password", password);
+        console.log(email);
+        console.log(password);
 
-        fetch("http://localhost:8080/login", {
-            method:"POST", headers:{
-                "Content-Type": "multipart/form-data",},
-            body: formdata,
-        }).then( (res) => {
-                alert("로그인 완료")
-                navigate("/articles")
-            })
-            .catch();
+        let body = {
+            username: email,
+            password: password,
+        };
+
+        axios.post("/login", body, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }})
+            .then((res) => {
+                 if(Array.isArray(res.data) === true)
+                 {
+                     alert("로그인 성공")
+                     console.log(res)
+                     localStorage.clear()
+                     localStorage.setItem('id', res.data.id)
+                     localStorage.setItem('token', res.data.token)
+                     //window.location.replace('http://localhost:3000/articles')
 
 
+                 }
+                  else {
+                      alert("로그인 실패")
+                      console.log(res)
+                      navigate('/')}
+                }
 
-        // axios.post("http://localhost:8080/login", qs.stringify(axiosBody), axiosConfig)
-        //     .then((res) => {
-        //     alert(res.data)
-        //     // if(res.data.email === undefined){
-        //     //     alert("입력하신 id가 존재하지 않습니다")
-        //     // } else if (res.data.email === null){
-        //     //     alert("입력하신 비밀번호가 일치하지 않습니다")
-        //     // } else if (res.data.email === email){
-        //     //     sessionStorage.setItem("email", email);
-        //     //     sessionStorage.setItem("password", password);
-        //     // }
-        //     //document.location.href = "/";
-        // })
-        //     .catch((err) => {
-        //         alert('에러 발생')
-        //     });
-    };
+    )};
+
 
     const backToArticleList = () => {
         navigate('/articles')
@@ -77,16 +68,17 @@ function Login() {
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             width: '100%', height: '100vh'
         }}>
-            <h2>로그인</h2>
-            <form id="formdata" style={{ display: 'flex', flexDirection: 'column'}}>
+            <form id="loginform" onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column'}}>
+
+
+                <h2>로그인</h2>
                 <label>Email</label>
                 <input type='email' value={email} name="username" onChange={onEmailHandler}/>
                 <label>Password</label>
                 <input type='password' value={password} name="password" onChange={onPasswordHandler}/>
                 <br />
-                <button type="submit" onClick={() => {onClickLogin(); backToArticleList();}}>
-                    Login
-                </button>
+                <button type="submit" >
+                    Login</button>
             </form>
         </div>
 

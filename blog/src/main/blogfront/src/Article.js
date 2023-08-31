@@ -1,7 +1,7 @@
 import {Divider, Typography} from "@material-ui/core";
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import ApiService from "./ApiService";
+import ApiService from "./api/ApiService";
 
 const Article = ({id, title, content}) => {
     const navigate = useNavigate();

@@ -8,6 +8,7 @@ import Login from "./Login";
 import Header from "./components/Layout/Header/Header";
 import Footer from "./components/Layout/Footer/Footer";
 import Signup from "./Signup";
+import Home from "./Home";
 const AppRouter = () => {
     return(
         <div>
@@ -16,7 +17,7 @@ const AppRouter = () => {
                 <div style={style}>
                     <Header />
                     <Routes>
-                        <Route exact path="/" element={<ArticleList/>}/>
+                        <Route exact path="/" element={<Home/>}/>
                         <Route path="/articles" element={<ArticleList/>}/>
                         <Route path="/articles/:id" element={<ViewArticle/>}/>
                         <Route path="/addArticle" element={<AddArticle/>}/>

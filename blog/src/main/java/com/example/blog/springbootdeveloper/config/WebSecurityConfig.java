@@ -3,6 +3,7 @@ package com.example.blog.springbootdeveloper.config;
 
 //import com.example.blog.springbootdeveloper.service.LoginFailureHandler;
 //import com.example.blog.springbootdeveloper.service.LoginSuccessHandler;
+import com.example.blog.springbootdeveloper.service.LoginSuccessHandler;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
@@ -35,7 +37,7 @@ public class WebSecurityConfig{
 
     private final ObjectMapper objectMapper;
 //    private final LoginFailureHandler loginFailureHandler;
-//    private final LoginSuccessHandler loginSuccessHandler;
+    private final AuthenticationSuccessHandler loginSuccessHandler;
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().requestMatchers("/static/**");
@@ -64,7 +66,8 @@ public class WebSecurityConfig{
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles").usernameParameter("username").passwordParameter("password"))
+                .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles")
+                        .usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler))
                 .logout(logout -> logout.logoutSuccessUrl("/api/articles").invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable)
                 .requestCache((cashe)-> cashe.requestCache(requestCache))
