@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import ApiService from "./api/ApiService";
+import ApiService from "../../api/ApiService";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import qs from "qs";
 
 
 function Login() {
@@ -43,12 +42,13 @@ function Login() {
                  {
                      alert("로그인 성공")
                      console.log(res)
-                     localStorage.clear()
-                     localStorage.setItem('id', res.data.id)
-                     localStorage.setItem('token', res.data.token)
-                     //window.location.replace('http://localhost:3000/articles')
+                     axios.get("/currentuser")
+                         .then((res) => {
+                             console.log(res)
+                             window.sessionStorage.setItem('id', res.data)
+                         })
 
-
+                     window.location.replace('/articles')
                  }
                   else {
                       alert("로그인 실패")
@@ -66,7 +66,7 @@ function Login() {
     return (
         <div style={{
             display: 'flex', justifyContent: 'center', alignItems: 'center',
-            width: '100%', height: '100vh'
+
         }}>
             <form id="loginform" onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column'}}>
 
@@ -82,20 +82,6 @@ function Login() {
             </form>
         </div>
 
-        // <div>
-        //     <form>
-        //         <label>Email</label>
-        //         <input type='email' value={id} />
-        //         <br/>
-        //         <label>Password</label>
-        //         <input type='password' value={pw}/>
-        //         <br/>
-        //         <button formAction=''>
-        //             Login
-        //         </button>
-        //     </form>
-        //
-        // </div>
 
     )
 }

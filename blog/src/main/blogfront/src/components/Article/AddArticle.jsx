@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import ApiService from "./api/ApiService";
+import ApiService from "../../api/ApiService";
 import {useNavigate} from "react-router-dom";
 import {Button, FormControl, TextField, Typography} from "@material-ui/core";
+import 'bootstrap/dist/css/bootstrap.css';
 
 const AddArticle = () => {
     const navigate = new useNavigate();
@@ -49,8 +50,8 @@ const AddArticle = () => {
                     minRows={20}
                     value={content}
                     onChange={onChange}></TextField>
-                <Button onClick={saveArticle}>저장</Button>
-                <Button onClick={backToArticleList}>취소</Button>
+                <button className="btn btn-primary" onClick={saveArticle}>저장</button>
+                <button className="btn btn-outline-secondary" onClick={backToArticleList}>취소</button>
             </FormControl>
         </>
         )

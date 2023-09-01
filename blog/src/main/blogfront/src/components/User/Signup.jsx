@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ApiService from "./api/ApiService";
+import ApiService from "../../api/ApiService";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -22,7 +22,7 @@ function Signup() {
     }
 
     const onClickSignup = () => {
-        axios.post("http://localhost:8080/signup", {
+        axios.post("/signup", {
             email: email,
             password: password
         }).then( (res) => {
@@ -38,10 +38,10 @@ function Signup() {
     return (
         <div style={{
             display: 'flex', justifyContent: 'center', alignItems: 'center',
-            width: '100%', height: '100vh'
         }}>
-            <h2>회원가입</h2>
+
             <form style={{ display: 'flex', flexDirection: 'column'}}>
+                <h2>회원가입</h2>
                 <label>Email</label>
                 <input type='email' value={email} onChange={onEmailHandler}/>
                 <label>Password</label>

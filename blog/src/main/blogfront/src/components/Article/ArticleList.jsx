@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ApiService from "./api/ApiService";
+import ApiService from "../../api/ApiService";
 import {
     Button,
     ListItem,
     ListItemText,
     Typography,
-    Table,
-    List,
-    TableCell,
-    TableHead,
-    TableRow,
-    ListItemIcon
+    List
 } from "@material-ui/core";
 import {useNavigate, Link} from "react-router-dom";
 
@@ -37,7 +32,7 @@ function ArticleList() {
             .then(function (response) {
                 // handle success
                 alert("삭제 완료")
-                window.location.replace("/")
+                window.location.replace("/api/articles")
                 console.log(response);
             })
             .catch(function (error) {
