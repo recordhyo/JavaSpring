@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const BLOG_API_URL = "http://localhost:8080/api/articles"
-
 class ApiService {
     LoadArticles() {
         return axios.get("/api/articles");

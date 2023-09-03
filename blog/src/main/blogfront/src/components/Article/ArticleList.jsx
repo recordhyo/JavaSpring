@@ -46,15 +46,22 @@ function ArticleList() {
 
 
     return (
-        <>
-            <Typography style={style}>블로그 글 목록</Typography>
-            <Button variant={"contained"} color={"primary"} onClick={addArticle}>글쓰기</Button>
+        <div style={style}>
+            <h2 className="text-center">전체글</h2>
+            <br/>
+            <div className="text-end me-3">
+                <button className="btn btn-warning" onClick={addArticle}>글쓰기</button>
+            </div>
+            <br/>
+            <hr />
+            <br/>
 
                 <List>
                     {articleList.map( (a)=> (
                     <ListItem key={a.id}>
                         <ListItemText>
-                            <a href={`/articles/${a.id}`}>{a.title}</a>
+                            <a href={`/articles/${a.id}`}><h4 className="fs-2 text-body-emphasis">{a.title}</h4></a>
+                            <p>{a.content}</p>
                         </ListItemText>
                             <Button variant="contained">
                                 <Link to={`/editArticle/${a.id}`} style={{ textDecoration: "none" }}>수정</Link>
@@ -64,13 +71,15 @@ function ArticleList() {
                         ))}
                 </List>
 
-        </>
+        </div>
     );
 
 }
 
 const style = {
-    display : 'flex',
-    justifyContent: 'center'
+    width : '80vw',
+    margin: '0 auto'
+    // marginLeft: '50px',
+    // marginRight: '50px'
 }
 export default ArticleList;
