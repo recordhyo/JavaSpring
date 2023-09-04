@@ -32,7 +32,7 @@ const EditArticle = () => {
     };
 
     const backToArticle = () => {
-        navigate('/articles/'+id)
+        navigate('/articles/')
     }
 
     useEffect(() => {
@@ -44,31 +44,36 @@ const EditArticle = () => {
 
 
     return(
-        <>
-            <Typography variant={"h3"} style={style}>글 수정하기</Typography>
-            <FormControl id="article" fullWidth={true}>
+        <div style={style}>
+            <h2 className="text-center">글수정</h2>
+            <br/>
+            <div className="text-end me-3">
+            </div>
+            <br/>
+            <hr />
+            <br/>
 
-                <TextField label="글 제목" name="title" onChange={onChange} value={title}></TextField>
-
-                <TextField
-                    id="outlined-multiline-static"
-                    label="글 내용"
-                    name="content"
-                    multiline
-                    minRows={20}
-                    value={content}
-                    onChange={onChange}></TextField>
-                <Button onClick={saveArticle}>수정</Button>
-                <Button onClick={backToArticle}>취소</Button>
-            </FormControl>
-        </>
+            <form className="mb-3">
+                <label className="form-label">제목</label>
+                <input type="email" className="form-control" defaultValue={title} name="title" onChange={onChange} />
+            </form>
+            <form className="mb-3">
+                <label className="form-label">내용</label>
+                <textarea className="form-control" name="content"
+                           defaultValue={content} onChange={onChange} rows="15"></textarea>
+            </form>
+            <div className="text-center">
+                <button className="btn btn-success me-3" onClick={saveArticle}>수정</button>
+                <button className="btn btn-outline-success" onClick={backToArticle}>취소</button>
+            </div>
+        </div>
         )
 
 
 }
 const style = {
-    display : 'flex',
-    justifyContent: 'center'
+    marginLeft: '50px',
+    marginRight: '50px'
 }
 
 export default EditArticle;

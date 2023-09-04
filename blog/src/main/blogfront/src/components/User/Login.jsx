@@ -2,7 +2,10 @@ import React, {useEffect, useState} from "react";
 import ApiService from "../../api/ApiService";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
+import kakao_btn from "../../kakao_btn.png"
+import naver_btn from "../../naver_btn.png"
+import google_btn from "../../google_btn.png"
+import 'bootstrap/dist/css/bootstrap.css';
 
 function Login() {
     const navigate = new useNavigate();
@@ -21,6 +24,10 @@ function Login() {
 
     const onPasswordHandler = (e) => {
         setPassword(e.currentTarget.value);
+    }
+
+    const goToSignupForm = () => {
+        navigate('/usersignup')
     }
 
     const submitHandler = (e) => {
@@ -45,7 +52,7 @@ function Login() {
                      axios.get("/currentuser")
                          .then((res) => {
                              console.log(res)
-                             window.sessionStorage.setItem('id', res.data)
+                             window.localStorage.setItem('id', res.data)
                          })
 
                      window.location.replace('/articles')
@@ -58,10 +65,6 @@ function Login() {
 
     )};
 
-
-    const backToArticleList = () => {
-        navigate('/articles')
-    }
 
     return (
         <div style={{
@@ -77,8 +80,14 @@ function Login() {
                 <label>Password</label>
                 <input type='password' value={password} name="password" onChange={onPasswordHandler}/>
                 <br />
-                <button type="submit" >
-                    Login</button>
+                <button type="submit" className="btn btn-outline-secondary mb-2" >로그인</button>
+                <button className="btn btn-secondary mb-3" onClick={goToSignupForm}>회원가입</button>
+                <p className="text-center">또는</p>
+                <a href="https://kauth.kakao.com/oauth/authorize?client_id=df19c3b3274e66a3b770a6f8d12b071c&redirect_uri=http://localhost:8080/login/oauth2/code/kakao&response_type=code">
+                <img alt="kakao" className="text-center mb-2" src={kakao_btn} width="200px"/></a>
+                <img alt="naver" className="text-center mb-2" src={naver_btn} width="200px"/>
+                <img alt="google" className="text-center mb-2" src={google_btn} width="200px"/>
+
             </form>
         </div>
 

@@ -2,7 +2,7 @@ import React from "react";
 import {Navigate, Outlet} from "react-router-dom";
 
 function PrivateRouter() {
-    const currentUser = window.sessionStorage.getItem("id");
+    const currentUser = window.localStorage.getItem("id");
 
     if (currentUser){
         return <Outlet/>

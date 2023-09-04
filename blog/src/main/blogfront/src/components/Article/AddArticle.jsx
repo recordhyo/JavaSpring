@@ -8,7 +8,7 @@ const AddArticle = () => {
     const navigate = new useNavigate();
     const [article, setArticle] = useState({
         title : '',
-        content:'',
+        content: '',
     });
 
     const {title, content } = article;
@@ -36,30 +36,34 @@ const AddArticle = () => {
     }
 
     return(
-        <>
-            <Typography variant={"h3"} style={style}>글 등록하기</Typography>
-            <FormControl id="article" fullWidth={true}>
-
-                <TextField label="글 제목" name="title" onChange={onChange} value={title}></TextField>
-
-                <TextField
-                    id="outlined-multiline-static"
-                    label="글 내용"
-                    name="content"
-                    multiline
-                    minRows={20}
-                    value={content}
-                    onChange={onChange}></TextField>
-                <button className="btn btn-primary" onClick={saveArticle}>저장</button>
-                <button className="btn btn-outline-secondary" onClick={backToArticleList}>취소</button>
-            </FormControl>
-        </>
+        <div style={style}>
+            <h2 className="text-center">글쓰기</h2>
+            <br/>
+            <div className="text-end me-3">
+            </div>
+            <br/>
+            <hr />
+            <br/>
+            <div className="mb-3">
+                <label className="form-label">제목</label>
+                <input type="email" className="form-control" name="title" onChange={onChange} />
+            </div>
+            <div className="mb-3">
+                <label className="form-label">내용</label>
+                <textarea className="form-control" name="content"
+                          onChange={onChange} rows="15"></textarea>
+            </div>
+            <div className="text-center">
+                <button className="btn btn-success me-3" onClick={saveArticle}>저장</button>
+                <button className="btn btn-outline-success" onClick={backToArticleList}>취소</button>
+            </div>
+        </div>
         )
 
 }
 const style = {
-    display : 'flex',
-    justifyContent: 'center'
+    marginLeft: '50px',
+    marginRight: '50px'
 }
 
 export default AddArticle;

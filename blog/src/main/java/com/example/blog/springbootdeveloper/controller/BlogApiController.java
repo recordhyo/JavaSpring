@@ -2,6 +2,7 @@ package com.example.blog.springbootdeveloper.controller;
 
 
 import com.example.blog.springbootdeveloper.domain.Article;
+import com.example.blog.springbootdeveloper.domain.User;
 import com.example.blog.springbootdeveloper.dto.AddArticleRequest;
 import com.example.blog.springbootdeveloper.dto.ArticleResponse;
 import com.example.blog.springbootdeveloper.dto.UpdateArticleRequest;
@@ -9,8 +10,11 @@ import com.example.blog.springbootdeveloper.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,8 +23,8 @@ public class BlogApiController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request){
-        Article savedArticle = blogService.save(request);
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal){
+        Article savedArticle = blogService.save(request, principal.getName());
         return  ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
 

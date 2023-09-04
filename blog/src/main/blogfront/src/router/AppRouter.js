@@ -10,6 +10,7 @@ import Signup from "../components/User/Signup";
 import Header from "../components/Layout/Header/Header";
 import Footer from "../components/Layout/Footer/Footer";
 import Home from "../Home";
+import Mypage from "../components/User/Mypage";
 const AppRouter = () => {
     return(
         <div>
@@ -25,6 +26,7 @@ const AppRouter = () => {
                             <Route path="/articles/:id" element={<ViewArticle/>}/>
                             <Route path="/addArticle" element={<AddArticle/>}/>
                             <Route path="/editArticle/:id" element={<EditArticle/>}/>
+                            <Route path="/mypage" element={<Mypage/>}/>
                         </Route>
                         <Route path="/userlogin" element={<Login/>}/>
                         <Route path="/usersignup" element={<Signup/>}/>
@@ -40,7 +42,7 @@ const AppRouter = () => {
 const style ={
     padding: '30px',
     width: '100%',
-    height: '100vh'
+    minHeight:'100vh'
 
 }
 

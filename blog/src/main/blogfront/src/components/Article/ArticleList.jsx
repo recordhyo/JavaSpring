@@ -32,7 +32,7 @@ function ArticleList() {
             .then(function (response) {
                 // handle success
                 alert("삭제 완료")
-                window.location.replace("/api/articles")
+                window.location.replace("/articles")
                 console.log(response);
             })
             .catch(function (error) {
@@ -46,31 +46,41 @@ function ArticleList() {
 
 
     return (
-        <>
-            <Typography style={style}>블로그 글 목록</Typography>
-            <Button variant={"contained"} color={"primary"} onClick={addArticle}>글쓰기</Button>
+        <div style={style}>
+            <h2 className="text-center">전체글</h2>
+            <br/>
+            <div className="text-end me-3">
+                <button className="btn btn-warning" onClick={addArticle}>글쓰기</button>
+            </div>
+            <br/>
+            <hr />
+            <br/>
 
                 <List>
                     {articleList.map( (a)=> (
                     <ListItem key={a.id}>
                         <ListItemText>
-                            <a href={`/articles/${a.id}`}>{a.title}</a>
+                            <a href={`/articles/${a.id}`} className="text-decoration-none" ><h4 className="fs-2 text-body-emphasis">{a.title}</h4></a>
+
+                            {a.content.length > 5 ? <p class="text-secondary">{a.content.slice(0,5)} ... [더보기]</p> : <p class="text-secondary"> {a.content}</p>}
                         </ListItemText>
-                            <Button variant="contained">
-                                <Link to={`/editArticle/${a.id}`} style={{ textDecoration: "none" }}>수정</Link>
-                            </Button>
-                        <Button variant="contained" onClick={() => deleteArticle(a.id)}>삭제</Button>
+                            <button className="btn btn-success me-3">
+                                <a href={`/editarticle/${a.id}`} className="text-decoration-none text-light" >수정</a>
+                            </button>
+                        <button className="btn btn-outline-success" onClick={() => deleteArticle(a.id)}>삭제</button>
                     </ListItem>
                         ))}
                 </List>
 
-        </>
+        </div>
     );
 
 }
 
 const style = {
-    display : 'flex',
-    justifyContent: 'center'
+    width : '80vw',
+    margin: '0 auto'
+    // marginLeft: '50px',
+    // marginRight: '50px'
 }
 export default ArticleList;

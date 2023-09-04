@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,12 +31,22 @@ public class User implements UserDetails {
     @Column(name = "role")
     private String role;
 
+    @Getter
+    @Column(name = "nickname", unique = true, nullable = false)
+    private String nickname;
+
+//    @Column(name = "refreshToken", nullable = true)
+//    private String refreshToken;
+//
+//    @Column(name = "accessToken", nullable = true)
+//    private String accessToken;
 
     @Builder
-    public User(String email, String password, String role){
+    public User(String email, String password, String role, String nickname){
         this.email = email;
         this.password = password;
         this.role = role;
+        this.nickname = nickname;
     }
 
     //계정의 권한 목록을 리턴
@@ -55,6 +66,7 @@ public class User implements UserDetails {
     public String getPassword(){
         return password;
     }
+
 
     //계정 만료 여부 리턴
     @Override
@@ -78,5 +90,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled(){
         return true; //활성화 됨
+    }
+
+    public User update(String nickname){
+        this.nickname = nickname;
+        return this;
     }
 }

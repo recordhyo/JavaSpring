@@ -1,12 +1,12 @@
-import styles from "./Header.module.css";
 import {useNavigate} from "react-router-dom";
 import ApiService from "../../../api/ApiService";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Person} from 'react-bootstrap-icons'
 
+
 const Header = () => {
     const navigate = new useNavigate();
-    const correntuser = sessionStorage.getItem("id")
+    const correntuser = window.localStorage.getItem("id")
 
     const goToLoginForm = () => {
         navigate('/userlogin')
@@ -17,11 +17,11 @@ const Header = () => {
     }
 
     const goToMypage = () => {
-        navigate('/')
+        navigate('/mypage')
     }
 
     const goToLogout = () => {
-        window.sessionStorage.clear()
+        window.localStorage.clear()
         ApiService.logout()
             .then( (res) => {
                 console.log(res)
@@ -43,19 +43,22 @@ const Header = () => {
             <div className="container">
                 <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
 
-                    <div className="col-md-3 mb-2 mb-md-0">
-                        <a href="/" className="d-inline-flex link-body-emphasis text-decoration-none">
-                            <svg className="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlinkHref="/"/></svg>
-                        </a>
-                    </div>
-                    <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                        <li onClick={backToHome} className="nav-link px-2 link-secondary" >HOME</li>
-                        <li onClick={goToArticle} className="nav-link px-2" >BLOG</li>
-                        <li className="nav-link px-2" >메뉴 3</li>
+                    <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg className="bi me-2" width="40" height="32"><use xlinkhref="#bootstrap"/></svg>
+                        <span className="fs-4">recordhyo</span>
+                    </a>
+                    <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/" className="nav-link px-2 link-secondary" aria-current="page">HOME</a></li>
+                        <li><a href="/articles" className="nav-link px-2 link-body-emphasis" >BLOG</a></li>
+                        <li><a href="/" className="nav-link px-2 link-body-emphasis">CONTACT</a></li>
                     </ul>
-                    <div className="col-md-3 text-end">
-                        <button className="btn btn-outline-primary me-2" onClick={goToLoginForm}><Person />로그인</button>
-                        <button className="btn btn-primary" onClick={goToSignupForm}>회원가입</button>
+                    <div className="text-end">
+                    <form className="mb-lg-0 me-lg-3 d-inline-block w-25" role="search">
+                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search" />
+                    </form>
+
+                        <button className="btn btn-outline-dark me-1" onClick={goToLoginForm}>로그인</button>
+                        <button className="btn btn-secondary" onClick={goToSignupForm}>회원가입</button>
                     </div>
 
                 </header>
@@ -65,24 +68,27 @@ const Header = () => {
     else {
         return (
             <div className="container">
-            <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+                <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
 
-                <div className="col-md-3 mb-2 mb-md-0">
-                    <a href="/" className="d-inline-flex link-body-emphasis text-decoration-none">
-                        <svg className="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlinkHref="/" /></svg>
+                    <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg className="bi me-2" width="40" height="32"><use xlinkhref="#bootstrap"/></svg>
+                        <span className="fs-4">recordhyo</span>
                     </a>
-                </div>
-                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li onClick={backToHome} className="nav-link px-2 link-secondary" >HOME</li>
-                    <li onClick={goToArticle} className="nav-link px-2" >BLOG</li>
-                    <li className="nav-link px-2" >메뉴 3</li>
-                </ul>
-                <div className="col-md-3 text-end">
-                    <button className="btn btn-outline-primary me-2" onClick={goToLogout}><Person />로그아웃</button>
-                    <button className="btn btn-primary" onClick={goToMypage}>마이페이지</button>
-                </div>
+                    <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/" className="nav-link px-2 link-secondary" aria-current="page">HOME</a></li>
+                        <li><a href="/articles" className="nav-link px-2 link-body-emphasis" >BLOG</a></li>
+                        <li><a href="/" className="nav-link px-2 link-body-emphasis">CONTACT</a></li>
+                    </ul>
+                    <div className="text-end">
+                    <form className="mb-lg-0 me-lg-3 d-inline-block w-25" role="search">
+                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search" />
+                    </form>
 
-            </header>
+                        <button className="btn btn-outline-dark me-1" onClick={goToLogout}>로그아웃</button>
+                        <button className="btn btn-secondary" onClick={goToMypage}>마이페이지</button>
+                    </div>
+
+                </header>
             </div>
         )
     }

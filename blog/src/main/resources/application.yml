@@ -1,8 +1,28 @@
 spring:
   security:
-    user:
-      name: user
-      password: 1234
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 947403880102-8ll6b94dard7lu7jch9vt73vtjld9r5t.apps.googleusercontent.com
+            client-secret: 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
+          kakao:
+            client-id: df19c3b3274e66a3b770a6f8d12b071c
+            client-secret: 2URxcmwmNGmeRMh1yRSIzkrBDbnOsUCw
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
   jpa:
     open-in-view: true
     hibernate:
@@ -21,3 +41,6 @@ spring:
   logging:
     level:
       org.hibernate.SQL: debug
+jwt:
+  issuer: gytla1@gmail.com
+  secret_key: sprint-blog

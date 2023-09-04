@@ -22,7 +22,7 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority(user.getRole())).toString());
+        return new User(user.getEmail(), user.getPassword(), user.getNickname(), Arrays.asList(new SimpleGrantedAuthority(user.getRole())).toString());
         //return userRepository.findByEmail(email)
         //        .orElseThrow(() -> new IllegalArgumentException((email)));
     }

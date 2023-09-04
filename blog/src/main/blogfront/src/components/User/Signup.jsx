@@ -7,6 +7,7 @@ function Signup() {
     const navigate = new useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [nickname, setNickname] = useState('')
 
     useEffect(() => {
         ApiService.signuppage()
@@ -21,11 +22,17 @@ function Signup() {
         setPassword(e.currentTarget.value);
     }
 
+    const onNicknameHandler = (e) => {
+        setNickname(e.currentTarget.value);
+    }
+
     const onClickSignup = () => {
         axios.post("/signup", {
             email: email,
-            password: password
+            password: password,
+            nickname:nickname
         }).then( (res) => {
+            console.log(res.data)
             alert("회원가입 완료")
         })
             .catch();
@@ -46,8 +53,10 @@ function Signup() {
                 <input type='email' value={email} onChange={onEmailHandler}/>
                 <label>Password</label>
                 <input type='password' value={password} onChange={onPasswordHandler}/>
+                <label>닉네임</label>
+                <input type='nickname' value={nickname} onChange={onNicknameHandler}/>
                 <br />
-                <button onClick={() => {onClickSignup(); backToArticleList();}}>
+                <button className="btn btn-secondary" onClick={() => {onClickSignup(); backToArticleList();}}>
                     회원가입
                 </button>
             </form>

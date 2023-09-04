@@ -18,7 +18,8 @@ const ViewArticle = () => {
              <Article
                 id={article.id}
                 title={article.title}
-                content={article.content}/>
+                content={article.content}
+                author={article.author}/>
 
          </div>
     );
