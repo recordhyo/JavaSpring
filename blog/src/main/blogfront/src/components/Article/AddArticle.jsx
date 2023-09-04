@@ -46,11 +46,19 @@ const AddArticle = () => {
             <br/>
             <div className="mb-3">
                 <label className="form-label">제목</label>
+<<<<<<< HEAD
                 <input type="email" className="form-control" name="title" onChange={onChange} />
             </div>
             <div className="mb-3">
                 <label className="form-label">내용</label>
                 <textarea className="form-control" name="content"
+=======
+                <input type="email" className="form-control" value={title} onChange={onChange} />
+            </div>
+            <div className="mb-3">
+                <label className="form-label">내용</label>
+                <textarea className="form-control" value={content}
+>>>>>>> 3d9d3e1742db862417e2003251b043743b1beeae
                           onChange={onChange} rows="15"></textarea>
             </div>
             <div className="text-center">

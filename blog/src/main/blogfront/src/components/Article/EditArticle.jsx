@@ -55,12 +55,21 @@ const EditArticle = () => {
 
             <form className="mb-3">
                 <label className="form-label">제목</label>
+<<<<<<< HEAD
                 <input type="email" className="form-control" defaultValue={title} name="title" onChange={onChange} />
             </form>
             <form className="mb-3">
                 <label className="form-label">내용</label>
                 <textarea className="form-control" name="content"
                            defaultValue={content} onChange={onChange} rows="15"></textarea>
+=======
+                <input type="email" className="form-control" value={title} onChange={onChange} />
+            </form>
+            <form className="mb-3">
+                <label className="form-label">내용</label>
+                <textarea className="form-control"
+                          value={content} onChange={onChange} rows="15"></textarea>
+>>>>>>> 3d9d3e1742db862417e2003251b043743b1beeae
             </form>
             <div className="text-center">
                 <button className="btn btn-success me-3" onClick={saveArticle}>수정</button>

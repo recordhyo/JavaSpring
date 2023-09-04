@@ -60,9 +60,14 @@ function ArticleList() {
                     {articleList.map( (a)=> (
                     <ListItem key={a.id}>
                         <ListItemText>
+<<<<<<< HEAD
                             <a href={`/articles/${a.id}`} className="text-decoration-none" ><h4 className="fs-2 text-body-emphasis">{a.title}</h4></a>
 
                             {a.content.length > 5 ? <p class="text-secondary">{a.content.slice(0,5)} ... [더보기]</p> : <p class="text-secondary"> {a.content}</p>}
+=======
+                            <a href={`/articles/${a.id}`}><h4 className="fs-2 text-body-emphasis">{a.title}</h4></a>
+                            <p>{a.content}</p>
+>>>>>>> 3d9d3e1742db862417e2003251b043743b1beeae
                         </ListItemText>
                             <button className="btn btn-success me-3">
                                 <a href={`/editarticle/${a.id}`} className="text-decoration-none text-light" >수정</a>
