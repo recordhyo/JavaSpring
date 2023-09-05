@@ -11,6 +11,7 @@ import Header from "../components/Layout/Header/Header";
 import Footer from "../components/Layout/Footer/Footer";
 import Home from "../Home";
 import Mypage from "../components/User/Mypage";
+import Token from "../Token";
 const AppRouter = () => {
     return(
         <div>
@@ -27,6 +28,7 @@ const AppRouter = () => {
                             <Route path="/addArticle" element={<AddArticle/>}/>
                             <Route path="/editArticle/:id" element={<EditArticle/>}/>
                             <Route path="/mypage" element={<Mypage/>}/>
+                            <Route path="/oauthlogin" element={<Token/>}/>
                         </Route>
                         <Route path="/userlogin" element={<Login/>}/>
                         <Route path="/usersignup" element={<Signup/>}/>

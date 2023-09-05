@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: oauth
   security:
     oauth2:
       client:
@@ -6,11 +8,14 @@ spring:
           google:
             client-id: 947403880102-8ll6b94dard7lu7jch9vt73vtjld9r5t.apps.googleusercontent.com
             client-secret: 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
+            scope:
+              - profile
+              - email
           kakao:
             client-id: df19c3b3274e66a3b770a6f8d12b071c
             client-secret: 2URxcmwmNGmeRMh1yRSIzkrBDbnOsUCw
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-            client-authentication-method: POST
+            client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
