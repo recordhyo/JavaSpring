@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AddUserRequest {
     private String email;
     private String password;
+    private String nickname;
+
     public User toEntity(PasswordEncoder passwordEncoder){
-        return User.builder().email(email).password(passwordEncoder.encode(password)).role("user").build();
+        return User.builder().email(email).password(passwordEncoder.encode(password)).role("user").nickname(nickname).build();
     }
 }
 
