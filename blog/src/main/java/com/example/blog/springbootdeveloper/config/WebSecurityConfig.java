@@ -41,12 +41,13 @@ public class WebSecurityConfig{
         requestCache.setMatchingRequestParameterName(null);
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles","/oauthlogin").permitAll()
+                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles").permitAll()
                         .anyRequest().authenticated())
+                //.formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles")
                         .usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .oauth2Login(oauth2Login -> oauth2Login.defaultSuccessUrl("/api/articles").successHandler(oAuthSuccessHandler))
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login").defaultSuccessUrl("/api/articles").successHandler(oAuthSuccessHandler))
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/api/articles").invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable)
                 .requestCache((cashe)-> cashe.requestCache(requestCache))

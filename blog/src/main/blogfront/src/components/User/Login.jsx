@@ -30,16 +30,17 @@ function Login() {
         navigate('/usersignup')
     }
 
+    const setcurrentuser = () => {
+
+    }
+
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(password);
 
         let body = {
             username: email,
             password: password,
         };
-
         axios.post("/login", body, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -47,15 +48,14 @@ function Login() {
             .then((res) => {
                  if(Array.isArray(res.data) === true)
                  {
-                     alert("로그인 성공")
-                     console.log(res)
+                     //alert("로그인 성공")
                      axios.get("/currentuser")
                          .then((res) => {
                              console.log(res)
-                             window.localStorage.setItem('id', res.data)
+                             window.localStorage.setItem('id', res.data.email)
                          })
 
-                     window.location.replace('/articles')
+                     window.location.href='/'
                  }
                   else {
                       alert("로그인 실패")
@@ -83,10 +83,12 @@ function Login() {
                 <button type="submit" className="btn btn-outline-secondary mb-2" >로그인</button>
                 <button className="btn btn-secondary mb-3" onClick={goToSignupForm}>회원가입</button>
                 <p className="text-center">또는</p>
-                <a href="https://kauth.kakao.com/oauth/authorize?client_id=df19c3b3274e66a3b770a6f8d12b071c&redirect_uri=http://localhost:8080/login/oauth2/code/kakao&response_type=code">
-                <img alt="kakao" className="text-center mb-2" src={kakao_btn} width="200px"/></a>
-                <img alt="naver" className="text-center mb-2" src={naver_btn} width="200px"/>
-                <img alt="google" className="text-center mb-2" src={google_btn} width="200px"/>
+                <a href="http://192.168.0.35:8080/oauth2/authorization/kakao">
+                    <img alt="kakao" className="text-center mb-2" src={kakao_btn} width="200px"/></a>
+                <a href="http://192.168.0.35:8080/oauth2/authorization/naver">
+                    <img alt="naver" className="text-center mb-2" src={naver_btn} width="200px"/></a>
+                <a href="http://192.168.0.35:8080/oauth2/authorization/google">
+                    <img alt="google" className="text-center mb-2" src={google_btn} width="200px"/></a>
 
             </form>
         </div>

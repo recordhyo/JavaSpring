@@ -32,6 +32,14 @@ class ApiService {
         return axios.get(`/logout`)
     }
 
+    userinfo() {
+        return axios.get('/currentuser')
+    }
+
+    oauthuserinfo(){
+        return axios.get('oauthcurrentuser')
+    }
+
 }
 
 export default new ApiService();

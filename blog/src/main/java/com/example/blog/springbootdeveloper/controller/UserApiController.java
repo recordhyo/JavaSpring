@@ -13,13 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.security.Principal;
+import java.util.Map;
 
 @Controller
 public class UserApiController {
@@ -39,14 +44,9 @@ public class UserApiController {
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
-        //User signupUser = userRepository.save(request.toEntity(passwordEncoder));
         return ResponseEntity.ok(userService.signup(request));
     }
-//    @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<User> login(@RequestBody LoginUserRequest request){
-//        User signupUser = userRepository.save(request);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(signupUser);
-//    }
+
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public String logIn(@RequestBody LoginUserRequest request) {
         try {
@@ -62,25 +62,11 @@ public class UserApiController {
                 SecurityContextHolder.getContext().getAuthentication());
         return "logout";
     }
+
+
+
 }
 
 
 
 
-//@RequiredArgsConstructor
-//@RestController
-//public class UserApiController {
-//    private final UserService userService;
-//
-//    @PostMapping("/user")
-//    public String saveUser(AddUserRequest request){
-//        return userService.saveUser(request);
-//    }
-//    @GetMapping("/logout")
-//    public String logout(HttpServletRequest request, HttpServletResponse response){
-//        new SecurityContextLogoutHandler().logout(request,response,
-//                SecurityContextHolder.getContext().getAuthentication());
-//        return "redirect:/api/articles";
-//    }
-//
-//}

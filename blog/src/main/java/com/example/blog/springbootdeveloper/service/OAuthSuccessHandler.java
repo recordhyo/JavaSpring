@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/")
+        response.sendRedirect(UriComponentsBuilder.fromUriString("http://192.168.0.35:3000/" )
                 .queryParam("accessToken", "accessToken")
                 .queryParam("refreshToken","refreshToken").build().encode(StandardCharsets.UTF_8).toUriString());
     }

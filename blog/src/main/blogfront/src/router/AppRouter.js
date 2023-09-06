@@ -12,14 +12,13 @@ import Footer from "../components/Layout/Footer/Footer";
 import Home from "../Home";
 import Mypage from "../components/User/Mypage";
 import Token from "../Token";
-const AppRouter = () => {
+function AppRouter(){
     return(
-        <div>
+
 
             <BrowserRouter>
                 <Header />
                 <div style={style}>
-
                     <Routes>
                         <Route exact path="/" element={<Home/>}/>
                         <Route path="/articles" element={<ArticleList/>}/>
@@ -33,12 +32,10 @@ const AppRouter = () => {
                         <Route path="/userlogin" element={<Login/>}/>
                         <Route path="/usersignup" element={<Signup/>}/>
                     </Routes>
-
                 </div>
                 <Footer/>
             </BrowserRouter>
 
-        </div>
     );
 }
 const style ={

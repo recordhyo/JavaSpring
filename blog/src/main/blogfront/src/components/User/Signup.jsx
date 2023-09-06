@@ -30,7 +30,7 @@ function Signup() {
         axios.post("/signup", {
             email: email,
             password: password,
-            nickname:nickname
+            nickname: nickname
         }).then( (res) => {
             console.log(res.data)
             alert("회원가입 완료")
@@ -38,8 +38,8 @@ function Signup() {
             .catch();
     }
 
-    const backToArticleList = () => {
-        navigate('/articles')
+    const backTohome = () => {
+        navigate('/')
     }
 
     return (
@@ -56,7 +56,7 @@ function Signup() {
                 <label>닉네임</label>
                 <input type='nickname' value={nickname} onChange={onNicknameHandler}/>
                 <br />
-                <button className="btn btn-secondary" onClick={() => {onClickSignup(); backToArticleList();}}>
+                <button className="btn btn-secondary" onClick={ () => {onClickSignup(); backTohome()}}>
                     회원가입
                 </button>
             </form>
