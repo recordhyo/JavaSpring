@@ -26,6 +26,8 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+!**/src/main/resources/application.yml
+!**/src/main/resources/properties/
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,6 +35,6 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-
+src/main/resources/properties
 ### VS Code ###
 .vscode/
