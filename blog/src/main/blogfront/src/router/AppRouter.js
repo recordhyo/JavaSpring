@@ -27,8 +27,8 @@ function AppRouter(){
                             <Route path="/addArticle" element={<AddArticle/>}/>
                             <Route path="/editArticle/:id" element={<EditArticle/>}/>
                             <Route path="/mypage" element={<Mypage/>}/>
-                            <Route path="/oauthlogin" element={<Token/>}/>
                         </Route>
+                        <Route path="/login/oauth2/code/kakao" element={<Token/>}/>
                         <Route path="/userlogin" element={<Login/>}/>
                         <Route path="/usersignup" element={<Signup/>}/>
                     </Routes>

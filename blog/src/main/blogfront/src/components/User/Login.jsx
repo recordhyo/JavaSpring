@@ -83,7 +83,11 @@ function Login() {
                 <button type="submit" className="btn btn-outline-secondary mb-2" >로그인</button>
                 <button className="btn btn-secondary mb-3" onClick={goToSignupForm}>회원가입</button>
                 <p className="text-center">또는</p>
-                <a href="http://192.168.0.35:8080/oauth2/authorization/kakao">
+                <a href="https://kauth.kakao.com/oauth/authorize
+?client_id=df19c3b3274e66a3b770a6f8d12b071c
+&redirect_uri=http://192.168.0.35:3000/login/oauth2/code/kakao
+&response_type=code">
+                {/*<a href="http://192.168.0.35:8080/oauth2/authorization/kakao?redirect_uri=http://192.168.0.35:3000/login/oauth2/code/kakao">*/}
                     <img alt="kakao" className="text-center mb-2" src={kakao_btn} width="200px"/></a>
                 <a href="http://192.168.0.35:8080/oauth2/authorization/naver">
                     <img alt="naver" className="text-center mb-2" src={naver_btn} width="200px"/></a>

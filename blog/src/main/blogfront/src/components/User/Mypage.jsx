@@ -16,6 +16,7 @@ function Mypage(){
         if(window.localStorage.getItem("id"))
         {   ApiService.userinfo()
             .then((res) => {
+                console.log(res)
                 setUserinfo(res.data);
             })
             .catch()
@@ -24,6 +25,7 @@ function Mypage(){
         else {
             ApiService.oauthuserinfo()
                 .then((res) => {
+                    console.log(res)
                     setUserinfo(res.data);
                 })
                 .catch()

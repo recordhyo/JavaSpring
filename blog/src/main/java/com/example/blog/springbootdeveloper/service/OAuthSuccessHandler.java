@@ -12,14 +12,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        response.sendRedirect(UriComponentsBuilder.fromUriString("http://192.168.0.35:3000/" )
-                .queryParam("accessToken", "accessToken")
-                .queryParam("refreshToken","refreshToken").build().encode(StandardCharsets.UTF_8).toUriString());
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        response.sendRedirect("http://192.168.0.35:3000/login/oauth2/code/kakao");
+        System.out.println("onAuthenticationSuccess 호출");
+                //.queryParam("code",).build().encode(StandardCharsets.UTF_8).toUriString());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.blog.springbootdeveloper.config;
 
+import com.example.blog.springbootdeveloper.service.CustomOAuth2UserService;
 import com.example.blog.springbootdeveloper.service.OAuthSuccessHandler;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,14 +26,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig{
     private final UserDetailService userService;
-
     private final ObjectMapper objectMapper;
 //    private final LoginFailureHandler loginFailureHandler;
     private final AuthenticationSuccessHandler loginSuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().requestMatchers("/static/**");
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,17 +43,19 @@ public class WebSecurityConfig{
         requestCache.setMatchingRequestParameterName(null);
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles").permitAll()
+                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles","/api/oauth2/*").permitAll()
                         .anyRequest().authenticated())
                 //.formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles")
                         .usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler))
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login").defaultSuccessUrl("/api/articles").successHandler(oAuthSuccessHandler))
+                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login").successHandler(oAuthSuccessHandler)
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService)))
+                        //.defaultSuccessUrl("/api/articles")).successHandler(oAuthSuccessHandler))
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/api/articles").invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable)
                 .requestCache((cashe)-> cashe.requestCache(requestCache))
-                //.addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), sernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
