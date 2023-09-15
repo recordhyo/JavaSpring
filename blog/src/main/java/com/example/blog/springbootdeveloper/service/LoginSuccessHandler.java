@@ -28,7 +28,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         setDefaultTargetUrl("/api/articles");
         SavedRequest savedRequest = requestCache.getRequest(request,response);
         redirectStrategy.sendRedirect(request,response,getDefaultTargetUrl());
-//        if(savedRequest != null){
+
+        System.out.println(authentication);
 //            String targetURL = savedRequest.getRedirectUrl();
 //            redirectStrategy.sendRedirect(request,response,targetURL);
 //        } else {

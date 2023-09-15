@@ -26,22 +26,20 @@ public class AddUserRequest {
             return User.builder()
                     .email(email)
                     .password(passwordEncoder.encode(password))
-                    .role("USER")
+                    .role("ROLE_USER")
                     .nickname(nickname)
                     .provider(provider)
                     .createddate(LocalDateTime.now())
-                    .email_p(email)
                     .build();
         }
         else {
             return User.builder()
                     .email(email)
                     .password(password)
-                    .role("USER")
+                    .role("ROLE_USER")
                     .nickname(provider+nickname)
                     .provider(provider)
                     .createddate(LocalDateTime.now())
-                    .email_p(email)
                     .build();
 
         }

@@ -21,8 +21,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        response.sendRedirect("http://192.168.0.35:3000/login/oauth2/code/kakao");
+        response.sendRedirect("http://192.168.0.35:3000/");
         System.out.println("onAuthenticationSuccess 호출");
-                //.queryParam("code",).build().encode(StandardCharsets.UTF_8).toUriString());
     }
 }

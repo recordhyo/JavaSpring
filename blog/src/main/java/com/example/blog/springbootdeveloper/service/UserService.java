@@ -19,14 +19,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -42,4 +42,5 @@ public class UserService {
         User user = (User) authentication.getPrincipal();
         return user.getUsername();
     }
+
 }

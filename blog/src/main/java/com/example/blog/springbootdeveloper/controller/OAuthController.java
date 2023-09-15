@@ -1,15 +1,13 @@
 package com.example.blog.springbootdeveloper.controller;
 
 import com.example.blog.springbootdeveloper.repository.UserRepository;
-import com.example.blog.springbootdeveloper.service.CustomOAuth2UserService;
-import com.example.blog.springbootdeveloper.service.UserDetailService;
 import com.example.blog.springbootdeveloper.service.OauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +16,14 @@ import java.util.Map;
 
 @Controller
 public class OAuthController {
-    String accessToken;
-    UserRepository userRepository;
-    CustomOAuth2UserService customOAuth2UserService;
+    private final UserRepository userRepository;
+    private final OauthService oauthService;
 
     @Autowired
-    OauthService oauthService;
-
+    public OAuthController(UserRepository userRepository, OauthService oauthService) {
+        this.userRepository = userRepository;
+        this.oauthService = oauthService;
+    }
 
     @ResponseBody
     @GetMapping("/oauthcurrentuser")
@@ -45,13 +44,12 @@ public class OAuthController {
 
     @ResponseBody
     @GetMapping("/api/oauth2/kakao")
-    public void kakaoCallback(@RequestParam String code){
+    public String kakaoCallback(@RequestParam String code){
 
-        accessToken = oauthService.getKakaoToken(code);
-
-
+        String accessToken = oauthService.getKakaoToken(code);
         oauthService.getKakaoInfo(accessToken);
-        //customOAuth2UserService.loadUser(accessToken);
+
+            return accessToken;
 
     }
 

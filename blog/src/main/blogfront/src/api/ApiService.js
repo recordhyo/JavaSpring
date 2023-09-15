@@ -20,14 +20,13 @@ class ApiService {
         return axios.put(`/api/articles/${id}`, Article);
     }
 
-    loginpage(){
+    loginpage() {
         return axios.get("/login")
     }
 
     signuppage(){
-        return axios.get("/signup")
+        return axios.get("/signup");
     }
-
     logout() {
         return axios.get(`/logout`)
     }

@@ -7,15 +7,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor //(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Data
@@ -47,31 +44,29 @@ public class User implements UserDetails {
     @Column(name = "createddate")
     private LocalDateTime createddate;
 
-    @Column(name = "email_p", unique = true, nullable = false)
-    private String email_p;
 
 
     @Builder
-    public User(String email, String password, String role, String nickname, String provider, LocalDateTime createddate, String email_p){
+    public User(String email, String password, String role, String nickname, String provider, LocalDateTime createddate){
         this.email = email;
         this.password = password;
         this.role = role;
         this.provider = provider;
         this.nickname = nickname;
         this.createddate = LocalDateTime.now();
-        this.email_p = email_p;
+
     }
 
     //계정의 권한 목록을 리턴
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     //계정의 고유한 값 리턴
     @Override
     public String getUsername(){
-        return email_p;
+        return email;
     }
 
     //계정의 비밀번호 리턴

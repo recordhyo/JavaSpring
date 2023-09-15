@@ -1,11 +1,13 @@
 package com.example.blog.springbootdeveloper.service;
 
+
 import com.example.blog.springbootdeveloper.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+
 @Getter
 public class OAuth2Attributes {
     private Map<String, Object> attributes;
@@ -17,11 +19,12 @@ public class OAuth2Attributes {
 
 
     @Builder
-    public OAuth2Attributes(Map<String,Object> attributes, String nameAttributeKey, String nickname, String email, String picture){
+    public OAuth2Attributes(Map<String,Object> attributes, String nameAttributeKey, String nickname, String email, String provider){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.nickname = nickname;
         this.email = email;
+        this.provider = provider;
 
     }
 
@@ -44,6 +47,7 @@ public class OAuth2Attributes {
                 .email((String) response.get("email"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
+                .provider("naver")
                 .build();
     }
 
@@ -56,6 +60,7 @@ public class OAuth2Attributes {
                 .email((String) kakaoProfile.get("email"))
                 .attributes(kakaoProfile)
                 .nameAttributeKey(userNameAttributeName)
+                .provider("kakao")
                 .build();
     }
 
@@ -66,17 +71,17 @@ public class OAuth2Attributes {
                 .email((String) attributes.get("email"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
+                .provider("google")
                 .build();
     }
     public User toEntity(){
         return User.builder()
                 .email(email)
                 .password(password)
-                .role("USER")
+                .role("ROLE_USER")
                 .nickname(nickname)
+                .provider(provider)
                 .createddate(LocalDateTime.now())
-                .email_p(email)
                 .build();
     }
-
 }

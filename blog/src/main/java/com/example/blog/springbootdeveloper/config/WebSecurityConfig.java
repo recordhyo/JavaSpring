@@ -2,6 +2,7 @@ package com.example.blog.springbootdeveloper.config;
 
 import com.example.blog.springbootdeveloper.service.CustomOAuth2UserService;
 import com.example.blog.springbootdeveloper.service.OAuthSuccessHandler;
+import com.example.blog.springbootdeveloper.service.OauthService;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,23 +14,31 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig{
     private final UserDetailService userService;
-    private final ObjectMapper objectMapper;
-//    private final LoginFailureHandler loginFailureHandler;
     private final AuthenticationSuccessHandler loginSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final OauthService oauthService;
+
+    public WebSecurityConfig(UserDetailService userService,AuthenticationSuccessHandler loginSuccessHandler, CustomOAuth2UserService customOAuth2UserService,OauthService oauthService){
+        this.userService = userService;
+        this.loginSuccessHandler = loginSuccessHandler;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oauthService = oauthService;
+    }
+
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().requestMatchers("/static/**");
@@ -43,14 +52,15 @@ public class WebSecurityConfig{
         requestCache.setMatchingRequestParameterName(null);
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles","/api/oauth2/*").permitAll()
+                .authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/signup", "/api/articles","/api/oauth2/**").permitAll()
                         .anyRequest().authenticated())
                 //.formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(formLogin -> formLogin.loginPage("/login").defaultSuccessUrl("/api/articles")
                         .usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler))
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login").successHandler(oAuthSuccessHandler)
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService)))
+                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login")
+                        .userInfoEndpoint(userinfo -> userinfo.userService(customOAuth2UserService))
+                        .successHandler(oAuthSuccessHandler))
                         //.defaultSuccessUrl("/api/articles")).successHandler(oAuthSuccessHandler))
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/api/articles").invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -64,7 +74,6 @@ public class WebSecurityConfig{
         return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userService)
                 .passwordEncoder(encoder).and().build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

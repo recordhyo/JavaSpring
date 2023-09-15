@@ -31,16 +31,16 @@ public class UserApiController {
 
     @Autowired
     private UserService userService;
-
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "temp";
     }
 
     @GetMapping("/signup")
     public String signup(){
-        return "signup";
+        return "temp";
     }
+
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
@@ -48,19 +48,20 @@ public class UserApiController {
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String logIn(@RequestBody LoginUserRequest request) {
-        try {
-            return userService.login(request);
-        } catch (Exception e) {
-            return e.getMessage();
+    public ResponseEntity<String> logIn(@RequestBody LoginUserRequest request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+        if ("validUsername".equals(email) && "validPassword".equals(password)) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
         }
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response){
+    public void logout(HttpServletRequest request, HttpServletResponse response){
         new SecurityContextLogoutHandler().logout(request,response,
                 SecurityContextHolder.getContext().getAuthentication());
-        return "logout";
     }
 
 
