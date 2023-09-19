@@ -7,9 +7,12 @@ import com.example.blog.springbootdeveloper.dto.AddArticleRequest;
 import com.example.blog.springbootdeveloper.dto.ArticleResponse;
 import com.example.blog.springbootdeveloper.dto.UpdateArticleRequest;
 import com.example.blog.springbootdeveloper.service.BlogService;
+import com.example.blog.springbootdeveloper.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,8 @@ public class BlogApiController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal){
-        Article savedArticle = blogService.save(request, principal.getName());
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, @AuthenticationPrincipal User user){
+        Article savedArticle = blogService.save(request, user.getNickname());
         return  ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
 

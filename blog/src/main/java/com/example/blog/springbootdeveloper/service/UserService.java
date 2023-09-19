@@ -42,5 +42,9 @@ public class UserService {
         User user = (User) authentication.getPrincipal();
         return user.getUsername();
     }
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+    }
 
 }

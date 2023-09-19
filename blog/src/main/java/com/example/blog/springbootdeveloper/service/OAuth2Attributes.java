@@ -4,17 +4,19 @@ package com.example.blog.springbootdeveloper.service;
 import com.example.blog.springbootdeveloper.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
 public class OAuth2Attributes {
+    PasswordEncoder passwordEncoder;
     private Map<String, Object> attributes;
     private String nameAttributeKey;
     private String nickname;
     private String email;
-    private String password = null;
+    private String password;
     private String provider;
 
 
@@ -25,6 +27,7 @@ public class OAuth2Attributes {
         this.nickname = nickname;
         this.email = email;
         this.provider = provider;
+        this.password = provider;
 
     }
 
@@ -77,7 +80,7 @@ public class OAuth2Attributes {
     public User toEntity(){
         return User.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(provider))
                 .role("ROLE_USER")
                 .nickname(nickname)
                 .provider(provider)

@@ -49,7 +49,7 @@ public class OAuthController {
         String accessToken = oauthService.getKakaoToken(code);
         oauthService.getKakaoInfo(accessToken);
 
-            return accessToken;
+        return accessToken;
 
     }
 

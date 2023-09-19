@@ -26,7 +26,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Autowired
     private UserRepository userRepository;
 
-
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("loaduser 실행");

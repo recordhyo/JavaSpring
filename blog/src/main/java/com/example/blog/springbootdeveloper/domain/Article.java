@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,16 +27,25 @@ public class Article {
     @Column(name = "author", nullable = false)
     private String author;
 
+    @Column(name = "createddate")
+    private String createddate;
+
+    @Column(name = "updateddate")
+    private String updateddate;
+
     @Builder
-    public Article(String title, String content, String author) {
+    public Article(String title, String content, String author, String createddate,String updateddate) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.createddate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.updateddate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public void update(String title, String content){
+    public void update(String title, String content, String updateddate){
         this.title = title;
         this.content = content;
+        this.updateddate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 }

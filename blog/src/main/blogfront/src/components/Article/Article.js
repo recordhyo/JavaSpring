@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import ApiService from "../../api/ApiService";
 
-const Article = ({id, title, content, author}) => {
+const Article = ({id, title, content, author, createddate, updateddate}) => {
     const navigate = useNavigate();
 
+    useEffect(() => {
+
+    }, []);
     const editArticle = () => {
         navigate('/editArticle/'+id)
     }
@@ -18,12 +21,14 @@ const Article = ({id, title, content, author}) => {
         navigate('/articles')
     }
 
+
     return (
 
         <div style={style}>
             <h2 className="text-center">{title}</h2>
             <div className="text-end me-3"></div>
             <p className="text-center" color="gray">작성자 : {author}</p>
+            <p className="text-center" color="gray">작성일 : {createddate} &nbsp;&nbsp; 수정일 : {updateddate}</p>
             <br/>
             <hr />
             <br/>

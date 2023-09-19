@@ -1,6 +1,9 @@
 package com.example.blog.springbootdeveloper.service;
 
 import com.example.blog.springbootdeveloper.domain.User;
+import com.example.blog.springbootdeveloper.dto.AddUserRequest;
+import com.example.blog.springbootdeveloper.dto.LoginUserRequest;
+import com.example.blog.springbootdeveloper.dto.LoginUserResponse;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
 import com.example.blog.springbootdeveloper.repository.UserRepository;
 import org.json.JSONObject;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,13 +33,16 @@ import java.util.Optional;
 
 @Service
 public class OauthService {
+    PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserDetailService userDetailService;
+    private final UserService userService;
 
     @Autowired
-    public OauthService(UserRepository userRepository, UserDetailService userDetailService) {
+    public OauthService(UserRepository userRepository, UserDetailService userDetailService, UserService userService) {
         this.userRepository = userRepository;
         this.userDetailService = userDetailService;
+        this.userService = userService;
     }
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
@@ -47,7 +54,7 @@ public class OauthService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String KAKAO_SECRET_KEY;
 
-    public String getKakaoToken(String code){
+    public String getKakaoToken(String code) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -56,11 +63,11 @@ public class OauthService {
         params.add("grant_type", "authorization_code");
         params.add("client_id", KAKAO_RESTAPIKEY);
         params.add("redirect_uri", KAKAO_REDIRECT_URI);
-        params.add("code",code);
+        params.add("code", code);
         params.add("client_secret", KAKAO_SECRET_KEY);
 
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<MultiValueMap<String,String>> kakaoTokenReq = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenReq = new HttpEntity<>(params, headers);
         //System.out.println(params);
         ResponseEntity<String> response = restTemplate.exchange(
                 "https://kauth.kakao.com/oauth/token",
@@ -123,22 +130,46 @@ public class OauthService {
             String id = jsonObject.get("id").toString();
             String email = kakao_account.get("email").toString();
             String nickname = properties.get("nickname").toString();
+            String password = "kakao";
 
             userInfo.put("email", email);
             userInfo.put("nickname", nickname);
             userInfo.put("id", Long.parseLong(id));
-
+            userInfo.put("password", password);
             System.out.println(userInfo);
+
+//            LoginUserRequest request = new LoginUserRequest();
+//            request.setEmail(email);
+//            request.setPassword("kakao");
+//            userService.login(request);
+            findOrCreateUser(email, nickname, "kakao");
 
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             System.out.println(authentication);
 
-        }
-        catch (IOException e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return userInfo;
+    }
+
+    public User findOrCreateUser(String email, String nickname, String provider) {
+        Optional<User> existingUser = userRepository.findByEmail(email);
+
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        } else {
+            User newUser = new User();
+            newUser.setEmail(email);
+            newUser.setNickname(nickname);
+            newUser.setRole("ROLE_USER");
+            newUser.setProvider(provider);
+            newUser.setCreateddate(LocalDateTime.now());
+
+            return userRepository.save(newUser);
+        }
     }
 
 

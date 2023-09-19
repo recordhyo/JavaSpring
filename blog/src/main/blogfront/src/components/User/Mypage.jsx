@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 function Mypage(){
     const navigate = new useNavigate();
-
+    const [isShow, setIsshow] = useState(false);
     let [userinfo, setUserinfo] = useState({
         email:'',
         nickname : '',
@@ -16,7 +16,7 @@ function Mypage(){
         if(window.localStorage.getItem("id"))
         {   ApiService.userinfo()
             .then((res) => {
-                console.log(res)
+                //console.log(res)
                 setUserinfo(res.data);
             })
             .catch()
@@ -25,7 +25,7 @@ function Mypage(){
         else {
             ApiService.oauthuserinfo()
                 .then((res) => {
-                    console.log(res)
+                    //console.log(res)
                     setUserinfo(res.data);
                 })
                 .catch()
@@ -40,7 +40,7 @@ function Mypage(){
         window.localStorage.clear()
         ApiService.logout()
             .then( (res) => {
-                    console.log(res)
+                    //console.log(res)
                 }
             )
         alert("로그아웃 완료")
@@ -50,13 +50,17 @@ function Mypage(){
     const setuserinfo = () => {
         ApiService.userinfo()
             .then((res) => {
-                console.log(res)
-                console.log(typeof(res))
-                console.log(res.data)
+
             })
     }
 
 
+    const notShow = () => {
+        setIsshow(false);
+    };
+    const onShow = () => {
+        setIsshow(true);
+    };
 
     return (
         <div className="px-4 py-5 my-5 text-center" >
@@ -65,8 +69,19 @@ function Mypage(){
                     <br/>
                     <br/>
                     <p className="lead mb-4">안녕하세요</p>
-                    <p className="lead mb-4">{userinfo.nickname} 님, </p>
-                    <p className="lead mb-4">현재 {userinfo.provider} 로그인 이용 중입니다. </p>
+                    <p className="lead mb-4">{userinfo.email} 님 ! </p>
+                    <p className="lead mb-4"> 닉네임 : {userinfo.nickname} </p>
+
+                    <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button type="button" className="btn btn-outline-primary btn-sm px-4 gap-3" onClick={onShow}>닉네임변경</button>
+                    </div>
+                    <br/>
+                    {isShow === true ? <div>
+                        <form>
+                            <input type='nickname' value={nickname}/>
+                            <button type="submit" className="btn btn-outline-primary btn-sm px-4 gap-3" onClick={notShow}>변경</button>
+                        </form> </div> : null}
+                    <br/>
                     <br/>
                     <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
                         <button type="button" className="btn btn-primary btn-lg px-4 gap-3" onClick={goToLogout}>로그아웃</button>

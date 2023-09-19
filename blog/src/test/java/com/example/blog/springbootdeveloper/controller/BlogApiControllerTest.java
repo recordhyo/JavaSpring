@@ -24,6 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -57,7 +59,9 @@ class BlogApiControllerTest {
         final String title = "title";
         final String content = "content";
         final String author = "author";
-        final AddArticleRequest userRequest = new AddArticleRequest(title, content);
+        final LocalDateTime createddate = LocalDateTime.now();
+        final LocalDateTime updateddate = LocalDateTime.now();
+        final AddArticleRequest userRequest = new AddArticleRequest(title, content, createddate, updateddate);
 
         final String requestBody = objectMapper.writeValueAsString(userRequest);
 

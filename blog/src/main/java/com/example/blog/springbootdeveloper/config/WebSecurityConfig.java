@@ -30,13 +30,12 @@ public class WebSecurityConfig{
     private final UserDetailService userService;
     private final AuthenticationSuccessHandler loginSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OauthService oauthService;
 
-    public WebSecurityConfig(UserDetailService userService,AuthenticationSuccessHandler loginSuccessHandler, CustomOAuth2UserService customOAuth2UserService,OauthService oauthService){
+
+    public WebSecurityConfig(UserDetailService userService,AuthenticationSuccessHandler loginSuccessHandler, CustomOAuth2UserService customOAuth2UserService){
         this.userService = userService;
         this.loginSuccessHandler = loginSuccessHandler;
         this.customOAuth2UserService = customOAuth2UserService;
-        this.oauthService = oauthService;
     }
 
     @Bean
