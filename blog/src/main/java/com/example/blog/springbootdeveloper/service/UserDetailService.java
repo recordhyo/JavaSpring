@@ -1,5 +1,6 @@
 package com.example.blog.springbootdeveloper.service;
 
+import com.example.blog.springbootdeveloper.domain.Role;
 import com.example.blog.springbootdeveloper.domain.User;
 import com.example.blog.springbootdeveloper.dto.AddUserRequest;
 import com.example.blog.springbootdeveloper.repository.UserRepository;
@@ -23,7 +24,7 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority(user.getRole())).toString(), user.getNickname(), user.getProvider(), user.getCreateddate());
+        return new User(user.getEmail(), user.getPassword(), Role.USER, user.getNickname(), user.getProvider(), user.getCreateddate());
         //return userRepository.findByEmail(email)
         //        .orElseThrow(() -> new IllegalArgumentException((email)));
     }

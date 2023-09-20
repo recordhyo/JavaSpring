@@ -7,7 +7,7 @@ import {Person} from 'react-bootstrap-icons'
 const Header = () => {
     const navigate = new useNavigate();
     const correntuser = window.localStorage.getItem("id")
-    const token = window.localStorage.getItem("token")
+    const userid = window.localStorage.getItem("userid")
     const tmp = 0;
 
     const goToLoginForm = () => {

@@ -1,6 +1,7 @@
 package com.example.blog.springbootdeveloper.dto;
 
 
+import com.example.blog.springbootdeveloper.domain.Role;
 import com.example.blog.springbootdeveloper.domain.User;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class AddUserRequest {
             return User.builder()
                     .email(email)
                     .password(passwordEncoder.encode(password))
-                    .role("ROLE_USER")
+                    .role(Role.USER)
                     .nickname(nickname)
                     .provider(provider)
                     .createddate(LocalDateTime.now())
@@ -36,7 +37,7 @@ public class AddUserRequest {
             return User.builder()
                     .email(email)
                     .password(password)
-                    .role("ROLE_USER")
+                    .role(Role.USER)
                     .nickname(provider+nickname)
                     .provider(provider)
                     .createddate(LocalDateTime.now())

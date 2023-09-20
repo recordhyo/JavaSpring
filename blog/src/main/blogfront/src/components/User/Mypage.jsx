@@ -25,7 +25,7 @@ function Mypage(){
         else {
             ApiService.oauthuserinfo()
                 .then((res) => {
-                    //console.log(res)
+                    console.log(res)
                     setUserinfo(res.data);
                 })
                 .catch()

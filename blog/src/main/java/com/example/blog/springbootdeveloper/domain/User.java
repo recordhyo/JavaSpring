@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "role")
-    private String role;
+    private Role role;
 
     @Column(name = "provider", nullable = true)
     private String provider;
@@ -47,7 +47,7 @@ public class User implements UserDetails {
 
 
     @Builder
-    public User(String email, String password, String role, String nickname, String provider, LocalDateTime createddate){
+    public User(String email, String password, Role role, String nickname, String provider, LocalDateTime createddate){
         this.email = email;
         this.password = password;
         this.role = role;
@@ -103,5 +103,9 @@ public class User implements UserDetails {
     public User update(String nickname){
         this.nickname = nickname;
         return this;
+    }
+
+    public String getRoleKey(){
+        return this.role.getKey();
     }
 }

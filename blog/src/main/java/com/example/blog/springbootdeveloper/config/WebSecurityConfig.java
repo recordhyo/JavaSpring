@@ -2,10 +2,7 @@ package com.example.blog.springbootdeveloper.config;
 
 import com.example.blog.springbootdeveloper.service.CustomOAuth2UserService;
 import com.example.blog.springbootdeveloper.service.OAuthSuccessHandler;
-import com.example.blog.springbootdeveloper.service.OauthService;
 import com.example.blog.springbootdeveloper.service.UserDetailService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,9 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -58,7 +52,7 @@ public class WebSecurityConfig{
                         .usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler))
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login")
-                        .userInfoEndpoint(userinfo -> userinfo.userService(customOAuth2UserService))
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                         .successHandler(oAuthSuccessHandler))
                         //.defaultSuccessUrl("/api/articles")).successHandler(oAuthSuccessHandler))
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/api/articles").invalidateHttpSession(true))

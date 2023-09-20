@@ -12,6 +12,7 @@ import Footer from "../components/Layout/Footer/Footer";
 import Home from "../Home";
 import Mypage from "../components/User/Mypage";
 import Token from "../Token";
+import Oauth2Success from "../components/User/Oauth2Success";
 function AppRouter(){
     return(
 
@@ -29,6 +30,7 @@ function AppRouter(){
                             <Route path="/mypage" element={<Mypage/>}/>
                         </Route>
                         <Route path="/login/oauth2/code/kakao" element={<Token/>}/>
+                        <Route path="/success/:userid" element={<Oauth2Success/>}/>
                         <Route path="/userlogin" element={<Login/>}/>
                         <Route path="/usersignup" element={<Signup/>}/>
                     </Routes>

@@ -3,7 +3,7 @@ import {Navigate, Outlet} from "react-router-dom";
 
 function PrivateRouter() {
     const currentUser = window.localStorage.getItem("id");
-    const currentOauth = window.localStorage.getItem("token")
+    const currentOauth = window.localStorage.getItem("userid")
 
     if (currentUser || currentOauth){
         return <Outlet/>

@@ -21,7 +21,9 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        response.sendRedirect("http://192.168.0.35:3000/");
+        String userid = attributes.get("id").toString();
+        response.sendRedirect("http://192.168.0.35:3000/success/"+userid);
+        //response.sendRedirect("http://192.168.0.35:3000/");
         System.out.println("onAuthenticationSuccess 호출");
     }
 }

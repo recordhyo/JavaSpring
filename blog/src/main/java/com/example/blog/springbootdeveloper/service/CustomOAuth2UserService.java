@@ -1,11 +1,13 @@
 package com.example.blog.springbootdeveloper.service;
+import com.example.blog.springbootdeveloper.domain.Role;
+import com.example.blog.springbootdeveloper.domain.SessionUser;
 import com.example.blog.springbootdeveloper.domain.User;
 import com.example.blog.springbootdeveloper.dto.AddUserRequest;
 import com.example.blog.springbootdeveloper.repository.UserRepository;
-import com.example.blog.springbootdeveloper.service.OAuth2Attributes;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -20,11 +22,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final HttpSession httpsession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -35,37 +39,35 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         //네이버 로그인인지 구글로그인인지 서비스를 구분해주는 코드
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-
         //OAuth2 로그인 진행시 키가 되는 필드값 프라이머리키와 같은 값 네이버 카카오 지원 x
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         //OAuth2UserService를 통해 가져온 데이터를 담을 클래스
-        OAuth2Attributes attributes = OAuth2Attributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         //로그인 한 유저 정보
         User user = saveOrUpdate(attributes);
-
+        System.out.println(user);
+        //httpsession.setAttribute("user", new SessionUser(user));
 
         // 로그인한 유저를 리턴함
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
 
-    private Map customAttribute(Map attributes, String userNameAttributeName, AddUserRequest addUserRequest, String registrationId) {
-        Map<String, Object> customAttribute = new LinkedHashMap<>();
-        customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
-        customAttribute.put("provider", registrationId);
-        customAttribute.put("email", addUserRequest.getEmail());
-        customAttribute.put("nickname", addUserRequest.getNickname());
-        return customAttribute;
+//    private Map customAttribute(Map attributes, String userNameAttributeName, AddUserRequest addUserRequest, String registrationId) {
+//        Map<String, Object> customAttribute = new LinkedHashMap<>();
+//        customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
+//        customAttribute.put("provider", registrationId);
+//        customAttribute.put("email", addUserRequest.getEmail());
+//        customAttribute.put("nickname", addUserRequest.getNickname());
+//        return customAttribute;
+//
+//    }
 
-    }
-
-    private User saveOrUpdate(OAuth2Attributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail())
+    private User saveOrUpdate(OAuthAttributes attributes) {
+        User user = userRepository.findByEmail(attributes.getEmail()+attributes.getProvider())
                 .map(entity -> entity.update(attributes.getNickname()))
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
@@ -79,8 +81,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else {
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setNickname(nickname);
-            newUser.setRole("ROLE_USER");
+            newUser.setNickname(provider+nickname);
+            newUser.setRole(Role.USER);
             newUser.setProvider(provider);
             newUser.setCreateddate(LocalDateTime.now());
 
