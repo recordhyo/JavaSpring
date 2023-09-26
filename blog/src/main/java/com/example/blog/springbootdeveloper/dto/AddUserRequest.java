@@ -9,13 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
+@RequiredArgsConstructor
 @Getter
 @Setter
-@Builder
 public class AddUserRequest {
     private String email;
+    private String name;
     private String password;
     private String nickname;
     private String provider;
@@ -23,27 +23,39 @@ public class AddUserRequest {
     private String email_p;
 
     public User toEntity(PasswordEncoder passwordEncoder){
-        if (password != null) {
-            return User.builder()
-                    .email(email)
-                    .password(passwordEncoder.encode(password))
-                    .role(Role.USER)
-                    .nickname(nickname)
-                    .provider(provider)
-                    .createddate(LocalDateTime.now())
-                    .build();
-        }
-        else {
-            return User.builder()
-                    .email(email)
-                    .password(password)
-                    .role(Role.USER)
-                    .nickname(provider+nickname)
-                    .provider(provider)
-                    .createddate(LocalDateTime.now())
-                    .build();
-
-        }
+        return User.builder()
+                .email(email)
+                .name(name)
+                .password(passwordEncoder.encode(password))
+                .role(Role.USER)
+                .nickname(nickname)
+                .provider(provider)
+                .email_p(email+provider)
+                .createddate(LocalDateTime.now())
+                .build();
     }
+//        if (password != null) {
+//            return User.builder()
+//                    .email(email)
+//                    .name(name)
+//                    .password(passwordEncoder.encode(password))
+//                    .role(Role.USER)
+//                    .nickname(nickname)
+//                    .provider(provider)
+//                    .createddate(LocalDateTime.now())
+//                    .build();
+//        }
+//        else {
+//            return User.builder()
+//                    .email(email)
+//                    .name(name)
+//                    .password(password)
+//                    .role(Role.USER)
+//                    .nickname(nickname)
+//                    .provider(provider)
+//                    .createddate(LocalDateTime.now())
+//                    .build();
+//        }
+
 }
 

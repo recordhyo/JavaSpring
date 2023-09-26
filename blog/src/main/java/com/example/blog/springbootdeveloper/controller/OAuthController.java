@@ -23,7 +23,7 @@ public class OAuthController {
     public Map<String, Object> oauthLoginInfo(Authentication authentication){
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
-
+        System.out.println(attributes);
         return attributes;
     }
 

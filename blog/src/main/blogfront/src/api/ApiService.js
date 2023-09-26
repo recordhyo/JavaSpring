@@ -39,6 +39,13 @@ class ApiService {
         return axios.get('oauthcurrentuser')
     }
 
+    deleteuser() {
+        return axios.delete(`/deleteuser`)
+    }
+
+    changeNickname(nickname) {
+        return axios.post("/nickname", nickname)
+    }
 }
 
 export default new ApiService();

@@ -33,13 +33,18 @@ public class Article {
     @Column(name = "updateddate")
     private String updateddate;
 
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
+
     @Builder
-    public Article(String title, String content, String author, String createddate,String updateddate) {
+    public Article(String title, String content, String author, String createddate,String updateddate, User user) {
         this.title = title;
         this.content = content;
         this.author = author;
         this.createddate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.updateddate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.user = user;
     }
 
     public void update(String title, String content, String updateddate){

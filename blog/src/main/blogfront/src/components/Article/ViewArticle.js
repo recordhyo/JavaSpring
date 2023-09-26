@@ -9,6 +9,7 @@ const ViewArticle = () => {
     useEffect(() => {
         ApiService.fetchArticleById(id).then(response => {
             setArticle(response.data);
+            console.log(response.data);
         })
     }, []);
 
@@ -20,7 +21,9 @@ const ViewArticle = () => {
                 content={article.content}
                 author={article.author}
                 createddate={article.createddate}
-                updateddate={article.updateddate}/>
+                updateddate={article.updateddate}
+                user={article.user}
+             />
          </div>
     );
 };

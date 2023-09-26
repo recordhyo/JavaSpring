@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from "react";
 import ApiService from "../../api/ApiService";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 function Mypage(){
     const navigate = new useNavigate();
     const [isShow, setIsshow] = useState(false);
+    const [newnickname, setNewNickname] = useState('')
     let [userinfo, setUserinfo] = useState({
         email:'',
         nickname : '',
         provider : ''
     });
     let {email, nickname, provider} = userinfo
-
+    let email_p = email+provider;
     useEffect(() => {
         if(window.localStorage.getItem("id"))
         {   ApiService.userinfo()
             .then((res) => {
-                //console.log(res)
+                //console.log(res.data.email)
                 setUserinfo(res.data);
             })
             .catch()
@@ -32,10 +34,9 @@ function Mypage(){
         }
     }, []);
 
-
-
-
-
+    const onNewNicknameHandler = (e) => {
+        setNewNickname(e.currentTarget.value);
+    }
     const goToLogout = () => {
         window.localStorage.clear()
         ApiService.logout()
@@ -47,15 +48,30 @@ function Mypage(){
         navigate('/')
     }
 
-    const setuserinfo = () => {
-        ApiService.userinfo()
-            .then((res) => {
 
-            })
+    const deleteUser = () => {
+        if (window.confirm("정말 탈퇴하시겠습니까?")) {
+            ApiService.deleteuser()
+                .then(function (response) {
+                    alert("탈퇴가 완료되었습니다")
+                    console.log(response)
+                    window.localStorage.clear()
+                    navigate('/')
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        } else {
+            alert("계속 이용해주세요~");
+        }
     }
 
 
     const notShow = () => {
+        ApiService.changeNickname(newnickname)
+            .then((res) =>
+                console.log(res))
         setIsshow(false);
     };
     const onShow = () => {
@@ -78,14 +94,14 @@ function Mypage(){
                     <br/>
                     {isShow === true ? <div>
                         <form>
-                            <input type='nickname' value={nickname}/>
+                            <input type='nickname' defaultValue={nickname} name="newnickname" onChange={onNewNicknameHandler}/>
                             <button type="submit" className="btn btn-outline-primary btn-sm px-4 gap-3" onClick={notShow}>변경</button>
                         </form> </div> : null}
                     <br/>
                     <br/>
                     <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
                         <button type="button" className="btn btn-primary btn-lg px-4 gap-3" onClick={goToLogout}>로그아웃</button>
-                        <button type="button" className="btn btn-outline-secondary btn-lg px-4">회원탈퇴</button>
+                        <button type="button" className="btn btn-outline-secondary btn-lg px-4" onClick={deleteUser}>회원탈퇴</button>
                     </div>
                 </div>
         </div>

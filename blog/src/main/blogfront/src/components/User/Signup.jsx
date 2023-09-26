@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 function Signup() {
     const navigate = new useNavigate();
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [nickname, setNickname] = useState('')
@@ -14,6 +15,9 @@ function Signup() {
             .then().catch()
     }, []);
 
+    const onNameHandler = (e) => {
+        setName(e.currentTarget.value);
+    }
     const onEmailHandler = (e) => {
         setEmail(e.currentTarget.value);
     }
@@ -28,6 +32,7 @@ function Signup() {
 
     const onClickSignup = () => {
         axios.post("/signup", {
+            name : name,
             email: email,
             password: password,
             nickname: nickname
@@ -49,6 +54,8 @@ function Signup() {
 
             <form style={{ display: 'flex', flexDirection: 'column'}}>
                 <h2>회원가입</h2>
+                <label>이름</label>
+                <input type='name' value={name} onChange={onNameHandler}/>
                 <label>Email</label>
                 <input type='email' value={email} onChange={onEmailHandler}/>
                 <label>Password</label>

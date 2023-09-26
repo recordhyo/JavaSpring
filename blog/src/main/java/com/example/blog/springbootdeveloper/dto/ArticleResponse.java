@@ -1,6 +1,7 @@
 package com.example.blog.springbootdeveloper.dto;
 
 import com.example.blog.springbootdeveloper.domain.Article;
+import com.example.blog.springbootdeveloper.domain.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ public class ArticleResponse {
     private String author;
     private String createddate;
     private String updateddate;
+    private User user;
+
     public ArticleResponse(Article article){
         this.id = article.getId();
         this.title = article.getTitle();
@@ -20,6 +23,8 @@ public class ArticleResponse {
         this.author = article.getAuthor();
         this.createddate = article.getCreateddate();
         this.updateddate = article.getUpdateddate();
+        this.user = getUser();
+
     }
 
 }

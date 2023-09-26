@@ -30,9 +30,6 @@ function Login() {
         navigate('/usersignup')
     }
 
-    const setcurrentuser = () => {
-
-    }
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -48,10 +45,10 @@ function Login() {
             .then((res) => {
                  if(Array.isArray(res.data) === true)
                  {
-                     //alert("로그인 성공")
+                     alert("로그인 성공")
                      axios.get("/currentuser")
                          .then((res) => {
-                             console.log(res)
+                             console.log(res.data)
                              window.localStorage.setItem('id', res.data.email)
                          })
 

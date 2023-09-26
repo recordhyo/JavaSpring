@@ -7,7 +7,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private Long userId;
+
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -44,16 +50,21 @@ public class User implements UserDetails {
     @Column(name = "createddate")
     private LocalDateTime createddate;
 
+    @Column(name = "email_p", unique = true, nullable = false)
+    private String email_p;
+
 
 
     @Builder
-    public User(String email, String password, Role role, String nickname, String provider, LocalDateTime createddate){
+    public User(String email, String name, String password, Role role, String nickname, String provider, String email_p, LocalDateTime createddate){
         this.email = email;
+        this.name = name;
         this.password = password;
         this.role = role;
         this.provider = provider;
         this.nickname = nickname;
         this.createddate = LocalDateTime.now();
+        this.email_p = email+provider;
 
     }
 
@@ -66,7 +77,7 @@ public class User implements UserDetails {
     //계정의 고유한 값 리턴
     @Override
     public String getUsername(){
-        return email;
+        return email_p;
     }
 
     //계정의 비밀번호 리턴
@@ -108,4 +119,5 @@ public class User implements UserDetails {
     public String getRoleKey(){
         return this.role.getKey();
     }
+
 }

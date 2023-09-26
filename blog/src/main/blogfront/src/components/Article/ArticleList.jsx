@@ -20,6 +20,7 @@ function ArticleList() {
     useEffect(() => {
         ApiService.LoadArticles().then(response => {
             setArticleList(response.data);
+            console.log(response.data)
         })
     }, []);
 

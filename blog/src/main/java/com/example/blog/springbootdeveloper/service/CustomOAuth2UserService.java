@@ -39,9 +39,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         //네이버 로그인인지 구글로그인인지 서비스를 구분해주는 코드
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
         //OAuth2 로그인 진행시 키가 되는 필드값 프라이머리키와 같은 값 네이버 카카오 지원 x
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
+
+        System.out.println(registrationId + userNameAttributeName);
 
         //OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
@@ -56,37 +59,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.getNameAttributeKey());
     }
 
-//    private Map customAttribute(Map attributes, String userNameAttributeName, AddUserRequest addUserRequest, String registrationId) {
-//        Map<String, Object> customAttribute = new LinkedHashMap<>();
-//        customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
-//        customAttribute.put("provider", registrationId);
-//        customAttribute.put("email", addUserRequest.getEmail());
-//        customAttribute.put("nickname", addUserRequest.getNickname());
-//        return customAttribute;
-//
-//    }
+
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail()+attributes.getProvider())
-                .map(entity -> entity.update(attributes.getNickname()))
+        User user = userRepository.findByEmail(attributes.getEmail())
+                //.map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
     }
 
-    public User findOrCreateUser(String email, String nickname, String provider) {
-        Optional<User> existingUser = userRepository.findByEmail(email);
-
-        if (existingUser.isPresent()) {
-            return existingUser.get();
-        } else {
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setNickname(provider+nickname);
-            newUser.setRole(Role.USER);
-            newUser.setProvider(provider);
-            newUser.setCreateddate(LocalDateTime.now());
-
-            return userRepository.save(newUser);
-        }
-    }
 }

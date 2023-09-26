@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import ApiService from "../../api/ApiService";
 
-const Article = ({id, title, content, author, createddate, updateddate}) => {
+const Article = ({id, title, content, author, createddate, updateddate, user}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
